@@ -87,11 +87,12 @@ class ContractForm extends Component {
     return (
       <form className="pure-form pure-form-stacked">
         {this.inputs
-          .filter((_, index) => !this.getFixedValue(index))
-          .map((input, index) => {            
-            var inputType = this.getType(index, input.type)
-            var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
-            return this.getInput(inputType, input.name, inputLabel);  
+          .map((input, index) => {
+            if (!this.getFixedValue(index)) {
+              var inputType = this.getType(index, input.type)
+              var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
+              return this.getInput(inputType, input.name, inputLabel);  
+            }           
         })}
         <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
       </form>
