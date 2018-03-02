@@ -84,11 +84,12 @@ class ContractForm extends Component {
   getInput(inputType, inputName, inputLabel, index) {
     switch(inputType) {
       case 'select': 
-        <select key={inputName} name={inputName} value={this.state[inputName]} onChange={this.handleInputChange}>
+        return <select key={inputName} name={inputName} value={this.state[inputName]} onChange={this.handleInputChange}>
           {this.getOptions(index).map((option) => {
             return (<option value={option.value}>{option.label}</option>)
           })}
         </select>
+        break;
       case 'textarea':
         return (<textarea key={inputName} name={inputName} value={this.state[inputName]} placeholder={inputLabel} onChange={this.handleInputChange} />);
         break;
