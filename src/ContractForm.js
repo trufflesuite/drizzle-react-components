@@ -77,8 +77,18 @@ class ContractForm extends Component {
     return Array.isArray(this.props.values) && this.props.values[index];
   }
 
-  getInput(inputType, inputName, inputLabel) {
+  getOptions(index) {
+    return Array.isArray(this.props.options) && this.props.options[index];
+  }
+
+  getInput(inputType, inputName, inputLabel, index) {
     switch(inputType) {
+      case 'select': 
+        <select key={inputName} name={inputName} value={this.state[inputName]} onChange={this.handleInputChange}>
+          {this.getOptions(index).map((option) => {
+            return (<option value={option.value}>{option.label}</option>)
+          })}
+        </select>
       case 'textarea':
         return (<textarea key={inputName} name={inputName} value={this.state[inputName]} placeholder={inputLabel} onChange={this.handleInputChange} />);
         break;
