@@ -61,11 +61,19 @@ class ContractForm extends Component {
     }
   }
 
+  getType(index, type) { 
+    if(Array.isArray(this.props.inputTypes) && this.props.inputTypes[index]) {
+      return this.props.inputTypes[index];
+    } else {
+      return this.translateType(type);
+    }
+  }
+
   render() {
     return (
       <form className="pure-form pure-form-stacked">
         {this.inputs.map((input, index) => {            
-            var inputType = this.translateType(input.type)
+            var inputType = this.getType(index, input.type)
             var inputLabel = this.props.labels ? this.props.labels[index] : input.name
             // check if input type is struct and if so loop out struct fields as well
             return (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
