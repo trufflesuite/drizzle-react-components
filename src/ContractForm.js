@@ -86,7 +86,7 @@ class ContractForm extends Component {
       case 'select': 
         return <select key={inputName} name={inputName} value={this.state[inputName]} onChange={this.handleInputChange}>
           {this.getOptions(index).map((option) => {
-            return (<option value={option.value}>{option.label}</option>)
+            return (<option key={inputName + option.value} value={option.value}>{option.label}</option>)
           })}
         </select>
         break;
