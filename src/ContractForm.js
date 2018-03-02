@@ -27,7 +27,7 @@ class ContractForm extends Component {
             this.inputs = abi[i].inputs;
 
             for (var i = 0; i < this.inputs.length; i++) {
-                initialState[this.inputs[i].name] = this.getFixedValue(i) || '';
+                initialState[this.inputs[i].name] = this.getFixedValue(i) || this.getDefaultValue(i) || '';
             }
 
             break;
@@ -71,6 +71,10 @@ class ContractForm extends Component {
 
   getFixedValue(index) {
     return Array.isArray(this.props.inputTypes) && this.props.fixedValue[index];
+  }
+  
+  getDefaultValue(index) {
+    return Array.isArray(this.props.values) && this.props.values[index];
   }
 
   getInput(inputType, inputName, inputLabel) {
