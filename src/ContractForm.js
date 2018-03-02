@@ -105,7 +105,7 @@ class ContractForm extends Component {
             if (!this.getFixedValue(index)) {
               var inputType = this.getType(index, input.type)
               var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
-              return this.getInput(inputType, input.name, inputLabel);  
+              return this.getInput(inputType, input.name, inputLabel, index);  
             }           
         })}
         <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
