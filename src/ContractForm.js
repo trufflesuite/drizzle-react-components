@@ -27,7 +27,7 @@ class ContractForm extends Component {
             this.inputs = abi[i].inputs;
 
             for (var i = 0; i < this.inputs.length; i++) {
-                initialState[this.inputs[i].name] = '';
+                initialState[this.inputs[i].name] = this.getFixedValue(i) || '';
             }
 
             break;
@@ -69,6 +69,10 @@ class ContractForm extends Component {
     }
   }
 
+  getFixedValue(index) {
+    return Array.isArray(this.props.inputTypes) && this.props.fixedValue[index];
+  }
+
   getInput(inputType, inputName, inputLabel) {
     switch(inputType) {
       case 'textarea':
@@ -82,7 +86,9 @@ class ContractForm extends Component {
   render() {
     return (
       <form className="pure-form pure-form-stacked">
-        {this.inputs.map((input, index) => {            
+        {this.inputs
+          .filter((_, index) => !this.getFixedValue(index))
+          .map((input, index) => {            
             var inputType = this.getType(index, input.type)
             var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
             return this.getInput(inputType, input.name, inputLabel);  
