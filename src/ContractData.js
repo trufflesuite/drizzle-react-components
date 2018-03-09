@@ -15,9 +15,8 @@ class ContractData extends Component {
     // Get the contract ABI
     const abi = this.contracts[this.props.contract].abi;
 
-    // Fetch initial value from chain and return cache key for reactive updates.
-    var methodArgs = this.props.methodArgs ? this.props.methodArgs : []
-    this.dataKey = this.contracts[this.props.contract].methods[this.props.method].cacheCall(...methodArgs)
+    this.updateCachedProps(this.props);
+    this.updateDataKey();
 
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
@@ -27,6 +26,31 @@ class ContractData extends Component {
           break
       }
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.didPropsChanged(nextProps)) {
+      this.updateCachedProps(nextProps);
+      this.updateDataKey();
+    }
+  }
+
+  didPropsChanged(nextProps) {
+    let nextMethodArgs = nextProps.methodArgs ? nextProps.methodArgs : [];
+
+    return this.contract !== nextProps.contract ||
+           this.method !== nextProps.method ||
+           this.methodArgs !== nextMethodArgs;
+  }
+
+  updateCachedProps(newProps) {
+    this.contract = newProps.contract;
+    this.method = newProps.method;
+    this.methodArgs = newProps.methodArgs ? newProps.methodArgs : [];
+  }
+
+  updateDataKey() {
+    this.dataKey = this.contracts[this.contract].methods[this.method].cacheCall(...this.methodArgs);
   }
 
   render() {
