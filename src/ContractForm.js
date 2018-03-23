@@ -68,7 +68,13 @@ class ContractForm extends Component {
             var inputType = this.translateType(input.type)
             var inputLabel = this.props.labels ? this.props.labels[index] : input.name
             // check if input type is struct and if so loop out struct fields as well
-            return (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
+            var element = (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
+            if(inputType === 'checkbox'){
+              // return checkbox input wrapped in a label
+              (<label>{inputLabel}: {element}</label>)
+            } else {
+              return (element);
+            }
         })}
         <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
       </form>
