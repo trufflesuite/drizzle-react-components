@@ -64,6 +64,16 @@ class ContractData extends Component {
       displayData = this.context.drizzle.web3.utils.hexToAscii(displayData)
     }
 
+    // Optionally convert from Wei
+    if (this.props.fromWei) {
+      displayData = this.context.drizzle.web3.utils.fromWei(displayData, this.props.fromWei)
+    }
+
+    // Optionally convert to Wei
+    if (this.props.toWei) {
+      displayData = this.context.drizzle.web3.utils.toWei(displayData, this.props.toWei)
+    }
+    
     // If return value is an array
     if (typeof displayData === 'array') {
       const displayListItems = displayData.map((datum, index) => {
