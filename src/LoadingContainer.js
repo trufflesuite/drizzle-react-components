@@ -1,7 +1,7 @@
 import { drizzleConnect } from 'drizzle-react'
 import React, { Children, Component } from 'react'
 import PropTypes from 'prop-types'
-
+import Loadable from 'react-loading-overlay'
 /*
  * Create component.
  */
@@ -33,7 +33,7 @@ class LoadingContainer extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <h1>🦊</h1>
-              <p><strong>We can't find any Ethereum accounts!</strong> Please check and make sure Metamask or you browser are pointed at the correct network and your account is unlocked.</p>
+              <p><strong>We can not find any Ethereum accounts!</strong> Please check and make sure Metamask or you browser are pointed at the correct network and your account is unlocked.</p>
             </div>
           </div>
         </main>
@@ -51,12 +51,11 @@ class LoadingContainer extends Component {
 
     return(
       <main className="container loading-screen">
-        <div className="pure-g">
-          <div className="pure-u-1-1">
-            <h1>⚙️</h1>
-            <p>Loading dapp...</p>
-          </div>
-        </div>
+        <Loadable
+          active={isActive}
+          spinner
+          text='Loading application'>
+        </Loadable>
       </main>
     )
   }

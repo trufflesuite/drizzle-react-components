@@ -19,7 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "prop-types": "^15.5.10",
-    "react": "^15.4.2"
+    "react": "^15.4.2",
+    "react-loading-overlay": "^0.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
