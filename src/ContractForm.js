@@ -44,7 +44,7 @@ class ContractForm extends Component {
   handleSubmit() {
     // Get arguments for method and put them into an object
     var args = new Object();
-    if (this.methodArgs == null) {
+    if (this.methodArgs != null) {
       args = JSON.parse(this.methodArgs);
     }
     args.from = this.props.accounts[this.props.accountIndex];    
