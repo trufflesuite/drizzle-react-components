@@ -18,6 +18,10 @@ class ContractForm extends Component {
     // Get the contract ABI
     const abi = this.contracts[this.props.contract].abi;
 
+    // Fetch methods arguments and index
+    this.methodArgs = this.props.methodArgs ? this.props.methodArgs : [] ;
+    this.accountIndex = this.props.accountIndex ? this.props.accountIndex : [] ;   
+    
     this.inputs = [];
     var initialState = {};
 
@@ -38,7 +42,11 @@ class ContractForm extends Component {
   }
 
   handleSubmit() {
-    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state));
+    // Get arguments for method and put them into an object
+    //var args = JSON.parse( this.methodArgs );
+    var args = this.methodArgs[0];
+    args.from = this.props.accounts[this.props.accountIndex];    
+    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state), args);
   }
 
   handleInputChange(event) {
@@ -86,6 +94,8 @@ ContractForm.contextTypes = {
 
 const mapStateToProps = state => {
   return {
+    accounts: state.accounts,
+    accountBalances: state.accountBalances,
     contracts: state.contracts
   }
 }
