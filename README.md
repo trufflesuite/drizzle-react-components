@@ -32,3 +32,5 @@ This components wraps your entire app (but within the DrizzleProvider) and will 
 `method` (string, required) Method whose inputs will be used to create corresponding form fields.
 
 `labels` (array) Custom labels; will follow ABI input ordering. Useful for friendlier names. For example "_to" becoming "Recipient Address".
+
+`txParams` (object) Transaction `gas`, `gasPrice` and `value` values to use when sending transaction. For example `{gas: 32000}` to set the gas limit.
