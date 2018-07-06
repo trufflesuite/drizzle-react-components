@@ -37,8 +37,12 @@ class ContractForm extends Component {
     this.state = initialState;
   }
 
+  generateSendArguments () {
+    return this.inputs.map(input => this.state[input.name])
+  }
+
   handleSubmit() {
-    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state));
+    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...this.generateSendArguments());
   }
 
   handleInputChange(event) {
