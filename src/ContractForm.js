@@ -91,6 +91,13 @@ ContractForm.contextTypes = {
   drizzle: PropTypes.object
 }
 
+ContractForm.propTypes = {
+  contract: PropTypes.string.isRequired,
+  method: PropTypes.string.isRequired,
+  labels: PropTypes.array,
+  txParams: PropTypes.object
+}
+
 /*
  * Export connected component.
  */
