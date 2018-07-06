@@ -38,7 +38,14 @@ class ContractForm extends Component {
   }
 
   generateSendArguments () {
-    return this.inputs.map(input => this.state[input.name])
+    let callArgs = this.inputs.map(input => this.state[input.name])
+
+    if(this.props.txParams) {
+      const {gas, gasLimit, gasPrice, value} = this.props.txParams
+      callArgs.push({gas, gasLimit, gasPrice, value})
+    }
+
+    return callArgs
   }
 
   handleSubmit() {
