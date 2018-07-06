@@ -37,8 +37,19 @@ class ContractForm extends Component {
     this.state = initialState;
   }
 
+  generateSendArguments () {
+    let callArgs = this.inputs.map(input => this.state[input.name])
+
+    if(this.props.txParams) {
+      const {gas, gasLimit, gasPrice, value} = this.props.txParams
+      callArgs.push({gas, gasLimit, gasPrice, value})
+    }
+
+    return callArgs
+  }
+
   handleSubmit() {
-    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state));
+    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...this.generateSendArguments());
   }
 
   handleInputChange(event) {
@@ -78,6 +89,13 @@ class ContractForm extends Component {
 
 ContractForm.contextTypes = {
   drizzle: PropTypes.object
+}
+
+ContractForm.propTypes = {
+  contract: PropTypes.string.isRequired,
+  method: PropTypes.string.isRequired,
+  labels: PropTypes.array,
+  txParams: PropTypes.object
 }
 
 /*
