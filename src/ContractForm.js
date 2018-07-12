@@ -38,7 +38,13 @@ class ContractForm extends Component {
   }
 
   handleSubmit() {
-    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state));
+    let args = {};
+
+    if (this.state.valueLabel) {
+      args.value = this.state.valueLabel;
+    }
+
+    this.contracts[this.props.contract].methods[this.props.method].cacheSend(...Object.values(this.state), args);
   }
 
   handleInputChange(event) {
@@ -62,6 +68,7 @@ class ContractForm extends Component {
   }
 
   render() {
+    const valueLabel = this.props.valueLabel;
     return (
       <form className="pure-form pure-form-stacked">
         {this.inputs.map((input, index) => {            
@@ -70,6 +77,9 @@ class ContractForm extends Component {
             // check if input type is struct and if so loop out struct fields as well
             return (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
         })}
+        {valueLabel &&
+          <input key={valueLabel} type='number' name={valueLabel} value={this.state[valueLabel]} placeholder={valueLabel} onChange={this.handleInputChange} />
+        }
         <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
       </form>
     )

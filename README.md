@@ -32,3 +32,5 @@ This components wraps your entire app (but within the DrizzleProvider) and will 
 `method` (string, required) Method whose inputs will be used to create corresponding form fields.
 
 `labels` (array) Custom labels; will follow ABI input ordering. Useful for friendlier names. For example "_to" becoming "Recipient Address".
+
+`valueLabel` (string) Custom label for a field where the user can specify the amount of wei they want to send with the transaction.
