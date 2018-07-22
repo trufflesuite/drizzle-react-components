@@ -70,7 +70,9 @@ class ContractForm extends Component {
             // check if input type is struct and if so loop out struct fields as well
             return (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
         })}
-        <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
+        <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>
+          {this.props.buttonName ? this.props.buttonName : "Submit"}
+        </button>
       </form>
     )
   }
