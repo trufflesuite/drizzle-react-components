@@ -43,8 +43,8 @@ class AccountData extends Component {
 
     return(
       <div>
-        <h4>{address}</h4>
-        <p>{balance} {units}</p>
+        <p>Address: {address}</p>
+        <p>Balance: {balance} {units}</p>
       </div>
     )
   }
