@@ -25,6 +25,8 @@ This components wraps your entire app (but within the DrizzleProvider) and will 
 
 `toAscii` (boolean) Converts the return value to an Ascii string before display.
 
+`render` ((data) => void) Provide your own rendering of the return value.
+
 ### ContractForm
 
 `contract` (string, required) Name of the contract whose method will be the basis the form.

@@ -64,6 +64,10 @@ class ContractData extends Component {
       displayData = this.context.drizzle.web3.utils.hexToAscii(displayData)
     }
 
+    if (this.props.render) {
+      return this.props.render(displayData);
+    }
+
     // If return value is an array
     if (typeof displayData === 'array') {
       const displayListItems = displayData.map((datum, index) => {
@@ -77,7 +81,7 @@ class ContractData extends Component {
       )
     }
 
-    // If retun value is an object
+    // If return value is an object
     if (typeof displayData === 'object') {
       var i = 0
       const displayObjectProps = []
