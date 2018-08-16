@@ -18,15 +18,6 @@ class ContractData extends Component {
     // Fetch initial value from chain and return cache key for reactive updates.
     var methodArgs = this.props.methodArgs ? this.props.methodArgs : []
     this.dataKey = this.contracts[this.props.contract].methods[this.props.method].cacheCall(...methodArgs)
-
-    // Iterate over abi for correct function.
-    for (var i = 0; i < abi.length; i++) {
-      if (abi[i].name === this.props.method) {
-          this.fnABI = abi[i]
-
-          break
-      }
-    }
   }
 
   render() {
@@ -67,9 +58,9 @@ class ContractData extends Component {
     // If return value is an array
     if (typeof displayData === 'array') {
       const displayListItems = displayData.map((datum, index) => {
-        <li key={index}>{datum}{pendingSpinner}</li>
+        <li key={index}>{`${datum}`}{pendingSpinner}</li>
       })
-      
+
       return(
         <ul>
           {displayListItems}
@@ -81,18 +72,18 @@ class ContractData extends Component {
     if (typeof displayData === 'object') {
       var i = 0
       const displayObjectProps = []
-      
+
       Object.keys(displayData).forEach((key) => {
         if (i != key) {
           displayObjectProps.push(<li key={i}>
             <strong>{key}</strong>{pendingSpinner}<br/>
-            {displayData[key]}
+            {`${displayData[key]}`}
           </li>)
         }
 
         i++
       })
-      
+
       return(
         <ul>
           {displayObjectProps}
@@ -101,7 +92,7 @@ class ContractData extends Component {
     }
 
     return(
-      <span>{displayData}{pendingSpinner}</span>
+      <span>{`${displayData}`}{pendingSpinner}</span>
     )
   }
 }

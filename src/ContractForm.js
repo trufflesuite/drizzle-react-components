@@ -42,6 +42,10 @@ class ContractForm extends Component {
   }
 
   handleSubmit() {
+    if (this.props.sendArgs) {
+      return this.contracts[this.props.contract].methods[this.props.method].cacheSend(...this.generateSendArguments(), this.props.sendArgs);
+    }
+
     this.contracts[this.props.contract].methods[this.props.method].cacheSend(...this.generateSendArguments());
   }
 
