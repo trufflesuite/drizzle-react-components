@@ -1,81 +1,80 @@
-import { drizzleConnect } from 'drizzle-react'
-import React, { Children, Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Children, Component, cloneElement } from "react";
+import { DrizzleContext } from "drizzle-react";
+import PropTypes from "prop-types";
 
-/*
- * Create component.
- */
-
-class LoadingContainer extends Component {
+class GeneralInfoFragment extends Component {
   render() {
-    if (this.props.web3.status === 'failed')
-    {
-      if (this.props.errorComp) {
-        return this.props.errorComp
-      }
-
-      return(
-        <main className="container loading-screen">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>⚠️</h1>
-              <p>This browser has no connection to the Ethereum network. Please use the Chrome/FireFox extension MetaMask, or dedicated Ethereum browsers Mist or Parity.</p>
-            </div>
-          </div>
-        </main>
-      )
-    }
-
-    if (this.props.web3.status === 'initialized' && Object.keys(this.props.accounts).length === 0)
-    {
-      return(
-        <main className="container loading-screen">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>🦊</h1>
-              <p><strong>We can't find any Ethereum accounts!</strong> Please check and make sure Metamask or your browser are pointed at the correct network and your account is unlocked.</p>
-            </div>
-          </div>
-        </main>
-      )
-    }
-
-    if (this.props.drizzleStatus.initialized)
-    {
-      return Children.only(this.props.children)
-    }
-
-    if (this.props.loadingComp) {
-      return this.props.loadingComp
-    }
-
-    return(
+    const { icon, children } = this.props;
+    return (
       <main className="container loading-screen">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>⚙️</h1>
-            <p>Loading dapp...</p>
+            <h1>{icon}</h1>
+            <p>{children}</p>
           </div>
         </div>
       </main>
-    )
+    );
   }
 }
 
-LoadingContainer.contextTypes = {
-  drizzle: PropTypes.object
-}
+GeneralInfoFragment.propTypes = {
+  icon: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+};
 
-/*
- * Export connected component.
- */
+const loadingInfoFragment = () => (
+  <GeneralInfoFragment icon="⚙️">
+    Loading blockchain info...
+  </GeneralInfoFragment>
+);
 
-const mapStateToProps = state => {
-  return {
-    accounts: state.accounts,
-    drizzleStatus: state.drizzleStatus,
-    web3: state.web3
+const loadingFailedFragment = () => (
+  <GeneralInfoFragment icon="⚠️️️">
+    This browser has no connection to the Ethereum network. Please use the
+    Chrome/FireFox extension MetaMask, or dedicated Ethereum browsers Mist or
+    Parity.
+  </GeneralInfoFragment>
+);
+
+const accountProblemFragment = () => (
+  <GeneralInfoFragment icon="🦊">
+    <strong>We can't find any Ethereum accounts!</strong> Please check and make
+    sure Metamask or your browser are pointed at the correct network and your
+    account is unlocked.
+  </GeneralInfoFragment>
+);
+
+class LoadingContainer extends Component {
+  render() {
+    const { children, loadingComp, errorComp } = this.props;
+    return (
+      <DrizzleContext.Consumer>
+        {drizzleContext => {
+          const { drizzle, drizzleState, initialized } = drizzleContext;
+
+          if (drizzle.web3.status === "failed")
+            return errorComp ? errorComp : loadingFailedFragment();
+          if (!initialized)
+            return loadingComp ? loadingComp : loadingInfoFragment();
+          if (drizzleState.accounts.length === 0)
+            return accountProblemFragment();
+
+          return Children.map(children, child =>
+            cloneElement(child, {
+              drizzle: drizzle,
+              drizzleState: drizzleState
+            })
+          );
+        }}
+      </DrizzleContext.Consumer>
+    );
   }
 }
+LoadingContainer.propTypes = {
+  children: PropTypes.object,
+  loadingComp: PropTypes.object,
+  errorComp: PropTypes.object
+};
 
-export default drizzleConnect(LoadingContainer, mapStateToProps)
+export default LoadingContainer;
