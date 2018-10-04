@@ -28,6 +28,10 @@ class LoadingContainer extends Component {
 
     if (this.props.web3.status === 'initialized' && Object.keys(this.props.accounts).length === 0)
     {
+      if (this.props.noAccountsComp) {
+        return this.props.noAccountsComp
+      }
+
       return(
         <main className="container loading-screen">
           <div className="pure-g">
