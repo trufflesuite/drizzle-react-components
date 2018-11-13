@@ -68,13 +68,13 @@ class ContractForm extends Component {
   render() {
     return (
       <form className="pure-form pure-form-stacked">
-        {this.inputs.map((input, index) => {            
+        {this.inputs.map((input, index) => {
             var inputType = this.translateType(input.type)
             var inputLabel = this.props.labels ? this.props.labels[index] : input.name
             // check if input type is struct and if so loop out struct fields as well
             return (<input key={input.name} type={inputType} name={input.name} value={this.state[input.name]} placeholder={inputLabel} onChange={this.handleInputChange} />)
         })}
-        <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>Submit</button>
+        <button key="submit" className="pure-button" type="button" onClick={this.handleSubmit}>{this.props.text ? this.props.text : 'Submit'}</button>
       </form>
     )
   }
