@@ -40,6 +40,24 @@ class LoadingContainer extends Component {
       )
     }
 
+    if (this.props.web3.status === 'initialized' && Object.keys(this.props.accounts).length !== 0 && !this.props.drizzleStatus.initialized)
+    {
+      if (this.props.drizzleErrorComp) {
+        return this.props.drizzleErrorComp;
+      }
+
+      return(
+        <main className="container loading-screen">
+          <div className="pure-g">
+            <div className="pure-u-1-1">
+              <h1>🦊</h1>
+              <p><strong>An error occurred while initializing Drizzle</strong> Please check Metamask or your browser are pointed at the correct network.</p>
+            </div>
+          </div>
+        </main>
+      )
+    }
+
     if (this.props.drizzleStatus.initialized)
     {
       return Children.only(this.props.children)
