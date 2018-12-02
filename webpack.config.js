@@ -24,7 +24,6 @@ module.exports = {
   externals: [
     'drizzle',
     'drizzle-react',
-    'prop-types',
     'react',
     'redux'
   ]

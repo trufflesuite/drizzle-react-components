@@ -1,68 +1,48 @@
-import { drizzleConnect } from 'drizzle-react'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
 
 /*
  * Create component.
  */
 
 class AccountData extends Component {
-  constructor(props, context) {
-    super(props);
+	constructor(props) {
+		super(props);
+		this.address = this.props.drizzleState.accounts[this.props.accountIndex];
+		this.state = { balance: 0 };
+	}
 
-    this.precisionRound = this.precisionRound.bind(this);
-  }
+	componentDidMount() {
+		const balance = this.props.drizzleState.accountBalances[this.address];
+		this.setState({ balance });
+	}
 
-  precisionRound(number, precision) {
-    var factor = Math.pow(10, precision)
-    return Math.round(number * factor) / factor
-  }
+	render() {
+		// Use lowercase units. See https://web3js.readthedocs.io/en/1.0/web3-utils.html#fromwei.
+    const units = this.props.units ? this.props.units.toLowerCase() : 'wei'
+    var balance = this.props.drizzle.web3.utils.fromWei(this.state.balance.toString(), units)
 
-  render() {
-    // No accounts found.
-    if(Object.keys(this.props.accounts).length === 0) {
-      return (
-        <span>Initializing...</span>
-      )
-    }
+		if (this.props.precision) {
+			// Should there be a sanity check on the precision prop before calling?
+			// e.g. precision = this.props.precision >= 0 ? this.props.precision : 3
+			balance = this.precisionRound(balance, this.props.precision)	
+		}
+		
+		if (this.props.displayFunc) {
+			return this.props.displayFunc(this.address, balance, units); 
+		}
 
-    // Get account address and balance.
-    const address = this.props.accounts[this.props.accountIndex]
-    var balance = this.props.accountBalances[address]
-    const units = this.props.units ? this.props.units.charAt(0).toUpperCase() + this.props.units.slice(1) : 'Wei'
-
-    // Convert to given units.
-    if (this.props.units) {
-      balance = this.context.drizzle.web3.utils.fromWei(balance, this.props.units)
-    }
-
-    // Adjust to given precision.
-    if (this.props.precision) {
-      balance = this.precisionRound(balance, this.props.precision)
-    }
-
-    return(
-      <div>
-        <h4>{address}</h4>
-        <p>{balance} {units}</p>
-      </div>
-    )
-  }
+		return (
+			<div>
+				<h4>{this.address}</h4>
+				<p>{balance} {units}</p>
+			</div>
+		);
+	}
+	
+	precisionRound(number, precision) {
+		var factor = Math.pow(10, precision);
+		return Math.round(number * factor) / factor;
+	}
 }
 
-AccountData.contextTypes = {
-  drizzle: PropTypes.object
-}
-
-/*
- * Export connected component.
- */
-
-const mapStateToProps = state => {
-  return {
-    accounts: state.accounts,
-    accountBalances: state.accountBalances    
-  }
-}
-
-export default drizzleConnect(AccountData, mapStateToProps)
+export default AccountData;
