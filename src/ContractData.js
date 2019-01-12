@@ -5,17 +5,36 @@ import React, { Component } from 'react';
  */
 
 class ContractData extends Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
 
-		this.methodArgs = this.props.methodArgs ? this.props.methodArgs : [];
-		this.state = { dataKey: null };
-	}
+        this.method = this.props.drizzle.contracts[this.props.contract].methods[this.props.method];
+        var methodArgs = this.props.methodArgs ? this.props.methodArgs : [];
+        this.state = { dataKey: this.method.cacheCall(...methodArgs) };
+    }
 
-	componentDidMount() {
-		const dataKey = this.props.drizzle.contracts[this.props.contract].methods[this.props.method].cacheCall(...this.methodArgs);
-		this.setState({ dataKey: dataKey });
-	}
+    /**
+    * componentDidUpdate is the right choice for updating the component anytime the
+    * methodArgs change throughout ContractData's lifecycle
+    */
+    componentDidUpdate(prevProps) {
+        /** 
+        * Check if methodArgs is defined, if it's not, the stringified empty arrays will always 
+        * be exactly equal and componentDidUpdate will always execute the nested code causing
+        * the app to throw: "Uncaught RangeError: Maximum call stack size exceeded"
+        */
+        if (this.props.methodArgs) {
+            /**
+             * In this case is correct to use JSON.stringify instead of .toString() 
+             * https://stackoverflow.com/questions/15834172/whats-the-difference-in-using-tostring-compared-to-json-stringify
+             */
+            if (JSON.stringify(this.props.methodArgs) !== JSON.stringify(prevProps.methodArgs)) {
+                this.setState({
+                    dataKey: this.method.cacheCall(...this.props.methodArgs)
+                });
+            }
+        }
+    }
 
 	render() {
 		const { drizzle, drizzleState } = this.props;
