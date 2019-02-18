@@ -76,6 +76,10 @@ class ContractData extends Component {
       displayData = this.context.drizzle.web3.utils.hexToAscii(displayData);
     }
 
+    if (this.props.customComponent) {
+      return <this.props.customComponent displayData={displayData} />
+    }
+
     // If return value is an array
     if (typeof displayData === "array") {
       const displayListItems = displayData.map((datum, index) => {
@@ -132,6 +136,7 @@ ContractData.propTypes = {
   hideIndicator: PropTypes.bool,
   toUtf8: PropTypes.bool,
   toAscii: PropTypes.bool,
+  // TODO custom component prop types
 };
 
 /*
