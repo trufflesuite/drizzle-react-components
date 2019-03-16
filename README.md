@@ -72,6 +72,8 @@ This component wraps your entire app (but within the DrizzleProvider) and will s
 
 `labels` (array) Custom labels; will follow ABI input ordering. Useful for friendlier names. For example "\_to" becoming "Recipient Address".
 
+`render` (function with two arguments) Render property to overwrite form generation. The first argument is an object the maps all method argument names to [react refs](https://reactjs.org/docs/refs-and-the-dom.html). Your form input fields require a `ref` property. Note: [If you use the Material-UI library, the element needs an additional `onChange` property](https://stackoverflow.com/questions/51310609/unable-to-retrieve-the-input-field-of-material-ui-using-refs-in-react-js/55195196#55195196). The second argument is the instant of the `ContractForm`, that means the `ContractForm`s `this`. Use that for calling `ContractForm.setSendArgs` or `ContractForm.handleSubmit` from your render property.
+
 ## Test Apps
 
 A test app targeting the React 16.3+ context API has been included at `./test-app`. And one targeting the legacy context API can be found at `test-app-legacy-context`.
@@ -79,12 +81,12 @@ A test app targeting the React 16.3+ context API has been included at `./test-ap
 ### Installation
 
 1. `cd ./test-app`
-1. Install dependencies: `npm install`
-1. Start your development blockchain: `truffle develop`
-1. (In Truffle develop console) Compile contracts: `compile`
-1. (In Truffle develop console) Migrate contracts: `migrate`
-1. In another terminal window: `cd ./app`
-1. Install dependencies: `npm install`
-1. Start dev server: `npm start`
+2. Install dependencies: `npm install`
+3. Start your development blockchain: `truffle develop`
+4. (In Truffle develop console) Compile contracts: `compile`
+5. (In Truffle develop console) Migrate contracts: `migrate`
+6. In another terminal window: `cd ./app`
+7. Install dependencies: `npm install`
+8. Start dev server: `npm start`
 
 NOTE: Make sure to `migrate --reset` your contracts and reset your Metamask account when switching between test apps, otherwise errors may occur.

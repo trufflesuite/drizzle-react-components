@@ -1,6 +1,8 @@
 import React from "react";
 import { newContextComponents } from "drizzle-react-components";
 import { DrizzleContext } from "drizzle-react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import logo from "./logo.png";
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
@@ -56,12 +58,36 @@ export default () => (
                 method="storedData"
               />
             </p>
-            <ContractForm
-              drizzle={drizzle}
-              drizzleState={drizzleState}
-              contract="SimpleStorage"
-              method="set"
-            />
+            <p>
+              Automatically generated form:
+              <ContractForm
+                drizzle={drizzle}
+                drizzleState={drizzleState}
+                contract="SimpleStorage"
+                method="set"
+              />
+            </p>
+            <p>
+              Fancy Material-UI form with render prop:
+              <ContractForm
+                drizzle={drizzle}
+                drizzleState={drizzleState}
+                contract="SimpleStorage"
+                method="set"
+                render={(inputs, parent) => (
+                  <form onSubmit={parent.handleSubmit}>
+                    <TextField
+                      type="number"
+                      ref={inputs.x}
+                      onChange={e => {
+                        inputs.x.current.value = e.target.value;
+                      }}
+                    />
+                    <Button onClick={parent.handleSubmit}>Submit</Button>
+                  </form>
+                )}
+              />
+            </p>
           </div>
 
           <div className="section">

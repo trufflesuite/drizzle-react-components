@@ -4,7 +4,8 @@ import {
   ContractData,
   ContractForm
 } from "drizzle-react-components";
-
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import logo from "./logo.png";
 
 const myRender = data => (
@@ -36,7 +37,29 @@ export default ({ accounts }) => (
         <strong>Stored Value: </strong>
         <ContractData contract="SimpleStorage" method="storedData" />
       </p>
-      <ContractForm contract="SimpleStorage" method="set" />
+      <p>
+        Automatically generated form:
+        <ContractForm contract="SimpleStorage" method="set" />
+      </p>
+      <p>
+        Fancy Material-UI form with render prop:
+        <ContractForm
+          contract="SimpleStorage"
+          method="set"
+          render={(inputs, parent) => (
+            <form onSubmit={parent.handleSubmit}>
+              <TextField
+                type="number"
+                ref={inputs.x}
+                onChange={e => {
+                  inputs.x.current.value = e.target.value;
+                }}
+              />
+              <Button onClick={parent.handleSubmit}>Submit</Button>
+            </form>
+          )}
+        />
+      </p>
     </div>
 
     <div className="section">
