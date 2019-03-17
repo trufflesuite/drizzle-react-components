@@ -5,8 +5,9 @@ class ContractForm extends Component {
   constructor(props) {
     super(props);
 
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.sendArgs = props.sendArgs || {};
 
     this.contracts = props.drizzle.contracts;
     this.utils = props.drizzle.web3.utils;
@@ -15,47 +16,46 @@ class ContractForm extends Component {
     const abi = this.contracts[this.props.contract].abi;
 
     this.inputs = [];
-    var initialState = {};
 
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
       if (abi[i].name === this.props.method) {
         this.inputs = abi[i].inputs;
 
+        // create references for all values, to be used in the form elements
         for (var j = 0; j < this.inputs.length; j++) {
-          initialState[this.inputs[j].name] = "";
+          this.inputs[j].ref = React.createRef();
         }
 
         break;
       }
     }
+  }
 
-    this.state = initialState;
+  setSendArgs(args) {
+    Object.assign(this.sendArgs, args);
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
     const convertedInputs = this.inputs.map(input => {
+      var value = input.ref.current !== null ? input.ref.current.value : ""; // default for undefined values
       if (input.type === "bytes32") {
-        return this.utils.toHex(this.state[input.name]);
+        return this.utils.toHex(value);
       }
-      return this.state[input.name];
+      return value;
     });
 
-    if (this.props.sendArgs) {
+    if (this.sendArgs) {
       return this.contracts[this.props.contract].methods[
         this.props.method
-      ].cacheSend(...convertedInputs, this.props.sendArgs);
+      ].cacheSend(...convertedInputs, this.sendArgs);
     }
 
     return this.contracts[this.props.contract].methods[
       this.props.method
     ].cacheSend(...convertedInputs);
-  }
-
-  handleInputChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
   }
 
   translateType(type) {
@@ -72,6 +72,17 @@ class ContractForm extends Component {
   }
 
   render() {
+    // If a render prop is given, have displayData rendered from that component
+    if (this.props.render) {
+      // calls render with array of input names and event handler
+      return this.props.render(
+        this.inputs.reduce((map, input) => {
+          map[input.name] = input.ref;
+          return map;
+        }, {}),
+        this,
+      );
+    }
     return (
       <form
         className="pure-form pure-form-stacked"
@@ -88,9 +99,8 @@ class ContractForm extends Component {
               key={input.name}
               type={inputType}
               name={input.name}
-              value={this.state[input.name]}
+              ref={input.ref}
               placeholder={inputLabel}
-              onChange={this.handleInputChange}
             />
           );
         })}
@@ -113,6 +123,7 @@ ContractForm.propTypes = {
   method: PropTypes.string.isRequired,
   sendArgs: PropTypes.object,
   labels: PropTypes.arrayOf(PropTypes.string),
+  render: PropTypes.func,
 };
 
 export default ContractForm;
