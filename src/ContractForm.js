@@ -8,7 +8,7 @@ class ContractForm extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.sendArgs = props.sendArgs || {};
+    this.sendArgs = {};
 
     this.contracts = context.drizzle.contracts;
     this.utils = context.drizzle.web3.utils;
@@ -47,10 +47,12 @@ class ContractForm extends Component {
       return value;
     });
 
-    if (this.sendArgs) {
+    const sendArgs = Object.assign({}, this.props.sendArgs, this.sendArgs);
+
+    if (sendArgs) {
       return this.contracts[this.props.contract].methods[
         this.props.method
-      ].cacheSend(...convertedInputs, this.sendArgs);
+      ].cacheSend(...convertedInputs, sendArgs);
     }
 
     return this.contracts[this.props.contract].methods[
