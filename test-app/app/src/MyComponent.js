@@ -14,10 +14,7 @@ const myRender = data => (
 export default () => (
   <DrizzleContext.Consumer>
     {drizzleContext => {
-      const { drizzle, drizzleState, initialized } = drizzleContext;
-      if (!initialized) {
-        return "Loading...";
-      }
+      const { drizzle, drizzleState } = drizzleContext;
 
       const { accounts } = drizzleState;
       return (
