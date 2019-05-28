@@ -32,18 +32,18 @@ export default () => (
             <AccountData
               drizzle={drizzle}
               drizzleState={drizzleState}
-              accountIndex="0"
+              accountIndex={0}
               units="ether"
-              precision="3"
+              precision={3}
             />
 
             <h2>Active Account with Custom Rendered Component</h2>
             <AccountData
               drizzle={drizzle}
               drizzleState={drizzleState}
-              accountIndex="0"
+              accountIndex={0}
               units="ether"
-              precision="3"
+              precision={3}
               render={({ address, balance, units }) => (
                 <div>
                   <div>My Address: <span style={{ color: "red" }}>{address}</span></div>
@@ -256,7 +256,7 @@ export default () => (
                 const displayObjectProps = [];
 
                 Object.keys(displayData).forEach(key => {
-                  if (i != key) {
+                  if (i !== key) {
                     displayObjectProps.push(
                       <li key={i}>
                         Element {i} has key: <strong>{key}</strong>
