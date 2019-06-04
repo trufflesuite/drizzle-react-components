@@ -12,6 +12,9 @@ class LoadingContainer extends Component {
       ? drizzleState.drizzleStatus.initialized
       : false;
     if (!initialized) {
+      if (this.props.initializingComp) {
+        return this.props.initializingComp;
+      }
       return (
         <main className="container loading-screen">
           <div className="pure-g">
@@ -27,6 +30,9 @@ class LoadingContainer extends Component {
     }
 
     if (initialized && Object.keys(drizzleState.accountBalances).length === 0) {
+      if (this.props.accessDeniedComp) {
+        return this.props.accessDeniedComp;
+      }
       return (
         <main className="container loading-screen">
           <div className="pure-g">
@@ -51,6 +57,8 @@ LoadingContainer.propTypes = {
   children: PropTypes.node,
   drizzle: PropTypes.object.isRequired,
   drizzleState: PropTypes.object,
+  initializingComp: PropTypes.node,
+  accessDeniedComp: PropTypes.node,
 };
 
 export default LoadingContainer;
