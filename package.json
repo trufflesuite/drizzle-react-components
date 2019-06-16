@@ -24,7 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react": "^15.4.2"
+    "react": "^16.8.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
